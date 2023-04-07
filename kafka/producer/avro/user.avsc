@@ -1,0 +1,56 @@
+{
+    "namespace": "kafka.predict",
+    "name": "User",
+    "type": "record",
+    "fields": [
+        {
+            "name": "name",
+            "type": "string"
+        },
+        {
+            "name": "favorite_number",
+            "type": "long"
+        },
+        {
+            "name": "favorite_color",
+            "type": "string"
+        },
+        {
+            "name": "active_days",
+            "default": [],
+            "type": {
+                "type": "array", 
+                "items": {
+                    "name": "Day",
+                    "type": "enum",
+                    "symbols": [
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                        "Sunday"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "extra",
+            "default": null,
+            "type": [
+                "null",
+                {
+                    "type": "record",
+                    "name": "Metadata",
+                    "fields": [
+                        {
+                            "name": "info",
+                            "type": "string"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

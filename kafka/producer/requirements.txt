@@ -1,0 +1,4 @@
+avro
+confluent-kafka
+fastavro
+requests

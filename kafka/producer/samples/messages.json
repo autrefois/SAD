@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Abba",
+        "favorite_number": 3,
+        "favorite_color": "blue",
+        "active_days": [
+                        "Monday",
+                        "Tuesday"
+                    ]
+    },
+    {
+        "name": "Baab",
+        "favorite_number": 5,
+        "favorite_color": "red",
+        "active_days": [
+                        "Monday",
+                        "Thursday"
+                    ]
+    }
+]
