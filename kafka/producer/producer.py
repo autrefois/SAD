@@ -8,10 +8,10 @@ from modules.message_producer import AvroMessageProducer
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    topic = 'foobar'
-    schema_file = 'avro/user.avsc'
+    topic = 'transactions'
+    schema_file = 'avro/card_transaction.avsc'
     config_file = 'config/producer_config.json'
-    sample_file = 'samples/messages.json'
+    sample_file = 'samples/card_transactions.json'
 
     with open(sample_file) as f:
         data = json.load(f)
