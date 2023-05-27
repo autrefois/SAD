@@ -59,7 +59,6 @@ class AvroMessageConsumer:
         except requests.exceptions.HTTPError as h:
             logging.error(' Prediction request could not be fulfilled.')
             raise h
-
         predictions = json.loads(json_response.text)['predictions']
         return predictions
 
