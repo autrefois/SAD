@@ -7,6 +7,14 @@ import logging
 import requests
 from time import sleep
 
+# custom modules
+# from ...producer.modules.message_producer import AvroMessageProducer
+
+# producer = AvroMessageProducer(
+#         config_file='config/producer_config.json',
+#         schema_file='schema_file.avsc'
+#     )
+
 
 class AvroMessageConsumer:
     consumer = None
@@ -75,8 +83,8 @@ class AvroMessageConsumer:
                 else:
                     logging.info(' Received message on partition {} with offset: {} and timestamp {}'
                                  .format(message.partition(),
-                                        message.offset(),
-                                        message.timestamp()))
+                                         message.offset(),
+                                         message.timestamp()))
                     message = message.value()
                     logging.debug(message.decode())
                     logging.info(' Attempting to communicate with tfserver... ')
@@ -88,6 +96,7 @@ class AvroMessageConsumer:
                             eval = self.predict_evaluator(instances, pred, 0.75)
                             if eval == 1:
                                 logging.warn(" Potential anomaly detected: \n{}".format(message.decode()))
+
                             else:
                                 logging.info(' Prediction request fulfilled.')
                     except Exception as e:
