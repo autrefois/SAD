@@ -24,4 +24,4 @@ if __name__ == "__main__":
     while True:
         for message in data:
             producer.publish_msg(topic=topic, key="card", message=message)
-        sleep(5)
+        sleep(1)

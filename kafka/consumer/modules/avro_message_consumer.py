@@ -77,9 +77,11 @@ class AvroMessageConsumer:
                             .format(message.topic(),
                                     message.partition(),
                                     message.offset()))
+                        continue
                     else:
                         logging.error(
                             ' Consumer error: {}'.format(message.error()))
+                        continue
                 else:
                     logging.info(' Received message on partition {} with offset: {} and timestamp {}'
                                  .format(message.partition(),
@@ -106,4 +108,4 @@ class AvroMessageConsumer:
                 logging.warning(' User requested stop.')
                 break
             finally:
-                sleep(2)
+                sleep(1)

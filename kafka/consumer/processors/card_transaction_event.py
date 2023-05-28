@@ -149,7 +149,13 @@ def encode(obj, ctx):
 
 
 def predict_eval(instances, pred, threshold):
-    # get mean squared error to determine whether this is an anomaly or not
+    """
+    Evaluates the prediction result based on the mean squared error.
+    Args:
+        instances (array): Input data sent to the prediction model
+        pred (array): Prediction result
+        threshold (float): Mean squared error threshold
+    """
     mse = np.mean(np.square(np.array(instances) - np.array(pred)), axis=1)
     print(mse)
     if mse >= threshold:
@@ -158,7 +164,12 @@ def predict_eval(instances, pred, threshold):
 
 
 def save_to_db(input, prediction):
-    # persist the input and the result in the database, for further analysis
+    """
+    Persists the data and the prediction result for further analysis.
+    Args:
+        input (array): Input data sent to the prediction model
+        prediction (int): The prediction evaluation result
+    """
     db_conn = psycopg2.connect(
             host='host.docker.internal',
             database="postgres",
@@ -177,4 +188,4 @@ def save_to_db(input, prediction):
         cursor.execute(q, obj)
         db_conn.commit()
     except Exception as e:
-        print(e)
+        raise e

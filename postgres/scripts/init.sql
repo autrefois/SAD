@@ -13,6 +13,6 @@ CREATE USER svc_kafka WITH ENCRYPTED PASSWORD 'kafka';
 GRANT ALL PRIVILEGES ON SCHEMA sad TO svc_kafka;
 GRANT ALL ON sad.tbl_card_transactions, sad.tbl_card_transactions_card_transaction_id_seq TO svc_kafka;
 
-CREATE USER svc_grafana WITH ENCRYPTED PASSWORD 'grafana';
-GRANT ALL PRIVILEGES ON SCHEMA sad TO svc_grafana;
-GRANT SELECT ON sad.tbl_card_transactions TO svc_grafana;
+CREATE USER svc_view WITH ENCRYPTED PASSWORD 'view';
+GRANT ALL PRIVILEGES ON SCHEMA sad TO svc_view;
+GRANT SELECT ON sad.tbl_card_transactions TO svc_view;
