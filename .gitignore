@@ -5,5 +5,4 @@
 *.log
 *.scala
 dataset
-kafka/consumer/config/*
 train/dummy/*

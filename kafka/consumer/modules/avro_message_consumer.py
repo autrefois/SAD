@@ -7,34 +7,31 @@ import logging
 import requests
 from time import sleep
 
-# custom modules
-# from ...producer.modules.message_producer import AvroMessageProducer
-
-# producer = AvroMessageProducer(
-#         config_file='config/producer_config.json',
-#         schema_file='schema_file.avsc'
-#     )
-
 
 class AvroMessageConsumer:
     consumer = None
-    tfserver_url = json.load(open('config/tf_server_config.json')).get('tfserver_url')
+    host = 'host.docker.internal'
+    tfserver_url = None
     predict_evaluator = None
 
     def __init__(self, config_file, schema_file, topic, predict_model, predict_evaluator, custom_encoder) -> None:
         logging.info(' Initializing consumer...')
-        self.tfserver_url = '{}/{}:predict'.format(self.tfserver_url, predict_model)
+        config = json.load(open(config_file))
+        self.tfserver_url = config['tfserver_config']['url']
+        self.tfserver_url = '{}/{}:predict'.format(self.tfserver_url.replace('$$HOST$$', self.host), predict_model)
         logging.info(' Tensorflow serving from {}'.format(self.tfserver_url))
         self.predict_evaluator = predict_evaluator
-        consumer_config = json.load(open(config_file))
+        consumer_config = config['consumer_config']
+        consumer_config['bootstrap.servers'] = consumer_config['bootstrap.servers'].replace('$$HOST$$', self.host)
+        schema_registry_config = config['schema_registry_config']
         with open(schema_file) as f:
             schema_str = f.read()
-        self.consumer = self._init_consumer(consumer_config, schema_str, custom_encoder)
+        self.consumer = self._init_consumer(consumer_config, schema_str, schema_registry_config, custom_encoder)
         self.consumer.subscribe([topic])
         logging.info(' Consumer subscribed to topic {}.'.format(topic))
 
-    def _init_consumer(self, consumer_config, schema_str, custom_encoder):
-        schema_registry_config = json.load(open('config/schema_registry_config.json'))
+    def _init_consumer(self, consumer_config, schema_str, schema_registry_config, custom_encoder):
+        schema_registry_config['url'] = schema_registry_config['url'].replace('$$HOST$$', self.host)
         schema_registry_client = SchemaRegistryClient(schema_registry_config)
         avro_deserializer = AvroDeserializer(
             schema_registry_client=schema_registry_client,

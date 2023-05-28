@@ -8,7 +8,7 @@ from modules.message_producer import AvroMessageProducer
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    topic = 'transactions'
+    topic = 'credit.card.transactions'
     schema_file = 'avro/card_transaction.avsc'
     config_file = 'config/producer_config.json'
     sample_file = 'samples/card_transactions.json'
@@ -23,5 +23,5 @@ if __name__ == "__main__":
 
     while True:
         for message in data:
-            producer.publish_msg(topic=topic, key="test", message=message)
+            producer.publish_msg(topic=topic, key="card", message=message)
         sleep(5)
