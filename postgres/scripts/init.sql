@@ -4,7 +4,7 @@ CREATE TABLE sad.tbl_card_transactions
 (
     card_transaction_id SERIAL PRIMARY KEY,
     amount NUMERIC(30,5),
-    potential_fraud_yn VARCHAR(3) DEFAULT 'N/A',
+    potential_fraud SMALLINT DEFAULT -1,
     consumer_tsp TIMESTAMP,
     audit_tsp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -1,5 +1,8 @@
+from datetime import datetime
 import json
 import numpy as np
+import psycopg2
+import psycopg2.extras
 
 
 class CardTransactionEvent(object):
@@ -152,3 +155,26 @@ def predict_eval(instances, pred, threshold):
     if mse >= threshold:
         return 1
     return 0
+
+
+def save_to_db(input, prediction):
+    # persist the input and the result in the database, for further analysis
+    db_conn = psycopg2.connect(
+            host='host.docker.internal',
+            database="postgres",
+            port=5432,
+            user="svc_kafka",
+            password="kafka")
+    obj = {
+        'amount': input['Amount'],
+        'potential_fraud': prediction,
+        'consumer_tsp': datetime.now()
+    }
+    cursor = db_conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    q = "INSERT INTO sad.tbl_card_transactions (amount, potential_fraud, consumer_tsp) \
+                    VALUES(%(amount)s, %(potential_fraud)s, %(consumer_tsp)s)"
+    try:
+        cursor.execute(q, obj)
+        db_conn.commit()
+    except Exception as e:
+        print(e)
