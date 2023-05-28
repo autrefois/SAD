@@ -2,8 +2,11 @@ from confluent_kafka import KafkaError, DeserializingConsumer
 from confluent_kafka.schema_registry import SchemaRegistryClient
 from confluent_kafka.schema_registry.avro import AvroDeserializer
 from confluent_kafka.serialization import StringDeserializer
+from datetime import datetime
 import json
 import logging
+import psycopg2
+import psycopg2.extras
 import requests
 from time import sleep
 
@@ -13,6 +16,8 @@ class AvroMessageConsumer:
     host = 'host.docker.internal'
     tfserver_url = None
     predict_evaluator = None
+    db_conn = None
+    cursor = None
 
     def __init__(self, config_file, schema_file, topic, predict_model, predict_evaluator, custom_encoder) -> None:
         logging.info(' Initializing consumer...')
@@ -29,6 +34,13 @@ class AvroMessageConsumer:
         self.consumer = self._init_consumer(consumer_config, schema_str, schema_registry_config, custom_encoder)
         self.consumer.subscribe([topic])
         logging.info(' Consumer subscribed to topic {}.'.format(topic))
+        self.db_conn = psycopg2.connect(
+            host=self.host,
+            database="postgres",
+            port=5432,
+            user="svc_kafka",
+            password="kafka")
+        self.cursor = self.db_conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
     def _init_consumer(self, consumer_config, schema_str, schema_registry_config, custom_encoder):
         schema_registry_config['url'] = schema_registry_config['url'].replace('$$HOST$$', self.host)
@@ -86,15 +98,25 @@ class AvroMessageConsumer:
                     logging.info(' Attempting to communicate with tfserver... ')
                     try:
                         input = json.loads(message.decode())
+                        obj = {}
+                        obj['amount'] = input['Amount']
+                        obj['consumer_tsp'] = datetime.now()
                         instances = [[input[k] for k in input.keys()]]
                         predictions = self._make_prediction(instances)
                         for pred in predictions:
                             eval = self.predict_evaluator(instances, pred, 0.75)
                             if eval == 1:
                                 logging.warn(" Potential anomaly detected: \n{}".format(message.decode()))
-
+                                obj['potential_fraud_yn'] = 'Y'
                             else:
+                                obj['potential_fraud_yn'] = 'N'
                                 logging.info(' Prediction request fulfilled.')
+                        q = "INSERT INTO sad.tbl_card_transactions (amount, potential_fraud_yn, consumer_tsp) VALUES(%(amount)s, %(potential_fraud_yn)s, %(consumer_tsp)s)"
+                        try:
+                            self.cursor.execute(q, obj)
+                            self.db_conn.commit()
+                        except Exception as e:
+                            print(e)
                     except Exception as e:
                         logging.error(' Unable to communicate with tfserver.')
                         logging.error(e)

@@ -4,11 +4,6 @@ SAD is the project accompanying my [dissertation thesis](https://docs.google.com
 
 ## Run
 
-### kafka broker - docker / kafka
-```
-docker-compose up d
-```
-
 ### model predictions server - tensorflow serving / SAD
 
 ```
