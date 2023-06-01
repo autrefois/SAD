@@ -170,22 +170,22 @@ def save_to_db(input, prediction):
         input (array): Input data sent to the prediction model
         prediction (int): The prediction evaluation result
     """
-    db_conn = psycopg2.connect(
-            host='host.docker.internal',
-            database="postgres",
-            port=5432,
-            user="svc_kafka",
-            password="kafka")
     obj = {
         'amount': input['Amount'],
         'potential_fraud': prediction,
         'consumer_tsp': datetime.now()
     }
-    cursor = db_conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     q = "INSERT INTO sad.tbl_card_transactions (amount, potential_fraud, consumer_tsp) \
                     VALUES(%(amount)s, %(potential_fraud)s, %(consumer_tsp)s)"
     try:
-        cursor.execute(q, obj)
-        db_conn.commit()
+        with psycopg2.connect(
+                host='host.docker.internal',
+                database='postgres',
+                port=5432,
+                user='svc_kafka',
+                password='kafka') as db_conn:
+            with db_conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cursor:
+                cursor.execute(q, obj)
+                db_conn.commit()
     except Exception as e:
         raise e

@@ -19,8 +19,11 @@ docker run -t --rm -p 8501:8501 --name tfserving_fraud_detector -v /$PWD/models/
 ## build image
 docker build -t consumer:latest -f consumer/Dockerfile .
 
-## run consumer
+## test consumer
 kubectl run consumer --rm --tty -i --image consumer:latest --image-pull-policy Never --restart Never --namespace kafka-predict --command -- python3 -u ./consumer.py
+
+## deploy consumer
+kubectl apply -f consumer/consumer.yml
 ```
 
 ### consumer logs
