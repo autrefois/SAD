@@ -66,7 +66,7 @@ class AvroMessageConsumer:
     def consume_msg(self):
         while True:
             try:
-                message = self.consumer.poll(timeout=30)
+                message = self.consumer.poll(timeout=25)
                 if not message:
                     # TODO: check brokers down
                     logging.info(' Waiting for messsage...')
@@ -95,7 +95,7 @@ class AvroMessageConsumer:
                         instances = [[input[k] for k in input.keys()]]
                         predictions = self._make_prediction(instances)
                         for pred in predictions:
-                            eval = self.predict_evaluator(instances, pred, 0.75)
+                            eval = self.predict_evaluator(instances, pred, 2.9)
                             if eval == 1:
                                 logging.warn(" Potential anomaly detected: \n{}".format(message.decode()))
                             else:
@@ -108,4 +108,4 @@ class AvroMessageConsumer:
                 logging.warning(' User requested stop.')
                 break
             finally:
-                sleep(1)
+                sleep(0.25)
