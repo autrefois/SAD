@@ -1,0 +1,20 @@
+{
+    "consumer_config": {
+        "bootstrap.servers": "$$HOST$$:29092",
+        "group.id": "fraud-detector",
+        "enable.auto.commit": "False",
+        "auto.commit.interval.ms": 600,
+        "socket.max.fails": 5,
+        "default.topic.config": {
+            "auto.offset.reset": "latest"
+        },
+        "max.poll.interval.ms": 30000,
+        "session.timeout.ms": 30000
+    },
+    "schema_registry_config": {
+        "url": "http://$$HOST$$:8081"
+    },
+    "tfserver_config": {
+        "url": "http://$$HOST$$:8501/v1/models"
+    }
+}

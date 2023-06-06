@@ -1,5 +1,8 @@
+from datetime import datetime
 import json
 import numpy as np
+import psycopg2
+import psycopg2.extras
 
 
 class CardTransactionEvent(object):
@@ -146,9 +149,43 @@ def encode(obj, ctx):
 
 
 def predict_eval(instances, pred, threshold):
-    # get mean squared error to determine whether this is an anomaly or not
+    """
+    Evaluates the prediction result based on the mean squared error.
+    Args:
+        instances (array): Input data sent to the prediction model
+        pred (array): Prediction result
+        threshold (float): Mean squared error threshold
+    """
     mse = np.mean(np.square(np.array(instances) - np.array(pred)), axis=1)
     print(mse)
     if mse >= threshold:
         return 1
     return 0
+
+
+def save_to_db(input, prediction):
+    """
+    Persists the data and the prediction result for further analysis.
+    Args:
+        input (array): Input data sent to the prediction model
+        prediction (int): The prediction evaluation result
+    """
+    obj = {
+        'amount': input['Amount'],
+        'potential_fraud': prediction,
+        'consumer_tsp': datetime.now()
+    }
+    q = "INSERT INTO sad.tbl_card_transactions (amount, potential_fraud, consumer_tsp) \
+                    VALUES(%(amount)s, %(potential_fraud)s, %(consumer_tsp)s)"
+    try:
+        with psycopg2.connect(
+                host='host.docker.internal',
+                database='postgres',
+                port=5432,
+                user='svc_kafka',
+                password='kafka') as db_conn:
+            with db_conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cursor:
+                cursor.execute(q, obj)
+                db_conn.commit()
+    except Exception as e:
+        raise e
