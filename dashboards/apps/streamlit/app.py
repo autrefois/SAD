@@ -76,14 +76,15 @@ def perc_chart(df) -> alt.Chart:
     fig = (
         alt.Chart(df)
         .transform_joinaggregate(
-            total='count()')
+            total='sum(qty)')
         .transform_calculate(
-            percent='qty' / alt.datum.total)
-        .mark_line()
-        .encode(x=alt.X(field='hour(Transaction Date):O'),
-                y=alt.Y('percent:Q', axis=alt.Axis(format='%')),
+            percent=alt.datum.qty / alt.datum.total)
+        .mark_bar()
+        .encode(x=alt.X('percent:Q', axis=alt.Axis(format='.0%', title="")),
+                y=alt.Y('flag:N', axis=alt.Axis(title="")),
                 color=alt.Color(field="flag",
-                                scale=alt.Scale(domain=['Normal', 'Anomaly'], range=['blue', 'red'])),
+                                scale=alt.Scale(domain=['Normal', 'Anomaly'], range=['blue', 'red']),
+                                legend=None),
                 )
     )
     return fig
@@ -122,10 +123,9 @@ def run() -> None:
                 fig = line_chart(df_flag)
                 st.altair_chart(fig, use_container_width=True)
             buffer, fig_col4 = st.columns([1, 20])
-            # with fig_col4:
-            #     st.markdown("### Detailed Data View")
-            #     fig = perc_chart(df)
-            #     st.altair_chart(fig, use_container_width=True)
+            with fig_col4:
+                fig = perc_chart(agg_data)
+                st.altair_chart(fig, use_container_width=True)
             buffer, fig_col5 = st.columns([1, 20])
             with fig_col5:
                 st.markdown("### Detailed Data View")
