@@ -38,3 +38,8 @@ INFO:root: Attempting to communicate with tfserver...
 WARNING:root: Potential anomaly detected: 
 ... {{ message }}
 ```
+
+### dashboard app - streamlit / streamlit
+```
+streamlit run app.py --server.port 8502
+```
