@@ -41,5 +41,5 @@ WARNING:root: Potential anomaly detected:
 
 ### dashboard app - streamlit / streamlit
 ```
-streamlit run app.py --server.port 8502
+streamlit run Home.py --server.port 8502
 ```

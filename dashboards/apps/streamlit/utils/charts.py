@@ -1,4 +1,5 @@
 import altair as alt
+import plotly.graph_objects as go
 
 
 def simple_chart(df) -> alt.Chart:
