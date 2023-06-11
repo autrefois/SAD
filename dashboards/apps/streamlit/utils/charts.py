@@ -7,8 +7,8 @@ def simple_chart(df) -> alt.Chart:
             .mark_point()
             .encode(x="Transaction Time",
                     y="Amount",
-                    color=alt.Color(shorthand='potential_fraud',
-                                    scale=alt.Scale(domain=[0, 1], range=['blue', 'red']),
+                    color=alt.Color(shorthand='Flag',
+                                    scale=alt.Scale(domain=['Normal', 'Anomaly'], range=['blue', 'red']),
                                     legend=None)
                     )
             ).configure_axis(
@@ -23,8 +23,8 @@ def line_chart(df) -> alt.Chart:
             .mark_line()
             .encode(x="Transaction Time",
                     y="Amount",
-                    color=alt.Color(shorthand='potential_fraud',
-                                    scale=alt.Scale(domain=[0, 1], range=['blue', 'red']),
+                    color=alt.Color(shorthand='Flag',
+                                    scale=alt.Scale(domain=['Normal', 'Anomaly'], range=['blue', 'red']),
                                     legend=None)
                     )
             ).configure_axis(
@@ -37,8 +37,8 @@ def donut_chart(df) -> alt.Chart:
     fig = (
         alt.Chart(df)
         .mark_arc()
-        .encode(theta=alt.Theta(field="qty", type="quantitative"),
-                color=alt.Color(field="flag", type="nominal",
+        .encode(theta=alt.Theta(field="Amount", type="quantitative"),
+                color=alt.Color(field="Flag", type="nominal",
                                 scale=alt.Scale(domain=['Normal', 'Anomaly'], range=['blue', 'red'])),
                 )
     )
@@ -49,13 +49,13 @@ def perc_chart(df) -> alt.Chart:
     fig = (
         alt.Chart(df)
         .transform_joinaggregate(
-            total='sum(qty)')
+            total='sum(Amount)')
         .transform_calculate(
-            percent=alt.datum.qty / alt.datum.total)
+            percent=alt.datum.Amount / alt.datum.total)
         .mark_bar()
-        .encode(x=alt.X('percent:Q', axis=alt.Axis(format='.0%', title="")),
-                y=alt.Y('flag:N', axis=alt.Axis(title="")),
-                color=alt.Color(field="flag",
+        .encode(x=alt.X('percent:Q', axis=alt.Axis(format='.0%', title=""), scale=alt.Scale(domain=[0, 1])),
+                y=alt.Y('Flag:N', axis=alt.Axis(title="")),
+                color=alt.Color(field="Flag",
                                 scale=alt.Scale(domain=['Normal', 'Anomaly'], range=['blue', 'red']),
                                 legend=None),
                 )

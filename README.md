@@ -4,7 +4,7 @@ SAD is the project accompanying my [dissertation thesis](https://docs.google.com
 
 ## Architecture Overview
 
-![x__paper/SAD.png](x__paper/SAD.png)
+![x/SAD.png](x/SAD.png)
 
 ## Run
 
