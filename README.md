@@ -4,7 +4,7 @@ SAD is the project accompanying my [dissertation thesis](https://docs.google.com
 
 ## Architecture Overview
 
-![x__paper/SAD.png](x__paper/SAD.png)
+![x/SAD.png](x/SAD.png)
 
 ## Run
 
@@ -37,4 +37,9 @@ INFO:root: Attempting to communicate with tfserver...
 [5.90700958]
 WARNING:root: Potential anomaly detected: 
 ... {{ message }}
+```
+
+### dashboard app - streamlit / streamlit
+```
+streamlit run app.py --server.port 8502
 ```

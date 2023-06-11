@@ -1,8 +1,5 @@
-#combo==0.1.3
 confluent-kafka
 fastavro
 numpy==1.23.2
-#pyod==1.0.9
-#pysad==0.1.1
 psycopg2-binary
 requests
