@@ -1,0 +1,8 @@
+altair==4.2.2
+datacommons-pandas==0.0.3
+datapane==0.16.5
+datapane-components==2023.3.20
+pandas==2.0.2
+plotly==5.14.1
+SQLAlchemy==2.0.15
+streamlit==1.23.1
