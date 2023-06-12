@@ -15,11 +15,11 @@ st.set_page_config(
 
 
 def run() -> None:
-    df = data_loader.update_data()
+    df = data_loader.get_latest_data(max_rows=200)
 
     # dashboard title
     st.title("Real-Time Anomaly Detection Dashboard")
-    st.sidebar.markdown("## Real-Time Dashboard 🎈")
+    st.sidebar.markdown("## 🎈 Real-Time Dashboard")
     st.sidebar.markdown("Displays card transaction information in real-time.")
 
     buffer, fig_filter = st.columns([10, 2])
@@ -28,7 +28,7 @@ def run() -> None:
     placeholder = st.empty()
 
     while True:
-        df = data_loader.update_data()
+        df = data_loader.get_latest_data(max_rows=200)
         agg_data = df.groupby(['Flag']).count().reset_index()
         with placeholder.container():
             buffer, fig_transactions = st.columns([0.25, 20])

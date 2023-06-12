@@ -1,3 +1,4 @@
+import pandas as pd
 import streamlit as st
 
 # custom modules
@@ -5,17 +6,31 @@ import utils.data_loader as data_loader
 import utils.charts as chrt
 
 
+st.set_page_config(
+    page_title="Real-Time Anomaly Detection Dashboard",
+    page_icon=":bar_chart:",
+    layout="wide",
+)
+
+
+@st.cache_data
+def get_data() -> pd.DataFrame:
+    df_extra = data_loader.get_latest_data(seconds=900, max_rows=500)
+    return df_extra
+
+
 def run() -> None:
     st.title("Real-Time Anomaly Detection Dashboard")
-    st.sidebar.markdown("## Data Analysis 📊")
+    st.sidebar.markdown("## 📊 Data Analysis")
     st.sidebar.markdown("Displays information on the latest transactions (static).")
 
-    df_extra = data_loader.get_extra_data()
+    df_extra = get_data()
     buffer, fig_header = st.columns([0.25, 20])
     with fig_header:
-        st.markdown("### 📊 Data Analysis 📊")
+        st.markdown("### Data Analysis")
         if st.button("🔄", ):
-            st.experimental_rerun()
+            st.cache_data.clear()
+            df_extra = get_data()
     placeholder = st.empty()
 
     agg_data = df_extra.groupby(['Flag']).count().reset_index()
