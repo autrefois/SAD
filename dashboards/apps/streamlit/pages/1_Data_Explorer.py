@@ -26,7 +26,7 @@ def run() -> None:
     buffer, fig_data = st.columns([0.25, 20])
 
     with fig_data:
-        st.markdown("### Detailed Data View")
+        st.markdown("### Data Explorer")
         st.sidebar.markdown("Displays the latest transactions (static).")
         number = st.number_input(label='How many seconds to look back?',
                                  max_value=500,

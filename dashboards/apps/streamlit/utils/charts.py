@@ -13,7 +13,7 @@ def simple_chart(df) -> alt.Chart:
                     )
             ).configure_axis(
             grid=True
-        )
+        ).interactive()
     return fig
 
 
@@ -29,7 +29,7 @@ def line_chart(df) -> alt.Chart:
                     )
             ).configure_axis(
             grid=True
-        )
+        ).interactive()
     return fig
 
 

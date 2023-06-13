@@ -49,7 +49,7 @@ def run() -> None:
         buffer, uploader = st.columns([0.25, 10])
         with uploader:
             st.markdown("### Transaction Analysis")
-            uploaded_files = st.file_uploader("Upload .csv files", type={"csv"}, accept_multiple_files=True)
+            uploaded_files = st.file_uploader("Upload .csv files for analysis", type={"csv"}, accept_multiple_files=True)
 
             if uploaded_files:
                 for file in uploaded_files:
