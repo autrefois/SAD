@@ -21,7 +21,7 @@ def get_data(number) -> pd.DataFrame:
 
 def run() -> None:
     st.title("Real-Time Anomaly Detection Dashboard")
-    st.sidebar.markdown("## ❄️ Data Explorer")
+    st.sidebar.markdown("## 🔍 Data Explorer")
 
     buffer, fig_data = st.columns([0.25, 20])
 

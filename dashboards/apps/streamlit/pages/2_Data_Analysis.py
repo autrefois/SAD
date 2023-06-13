@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+from streamlit_extras.dataframe_explorer import dataframe_explorer
 
 # custom modules
 import utils.data_loader as data_loader
@@ -22,7 +23,7 @@ def get_data() -> pd.DataFrame:
 def run() -> None:
     st.title("Real-Time Anomaly Detection Dashboard")
     st.sidebar.markdown("## 📊 Data Analysis")
-    st.sidebar.markdown("Displays information on the latest transactions (static).")
+    st.sidebar.markdown("Displays information on the latest transactions (static) or uploaded .csv files.")
 
     df_extra = get_data()
     buffer, fig_header = st.columns([0.25, 20])
@@ -44,6 +45,24 @@ def run() -> None:
         with fig_percent:
             fig = chrt.perc_chart(agg_data)
             st.altair_chart(fig, use_container_width=True)
+
+        buffer, uploader = st.columns([0.25, 10])
+        with uploader:
+            st.markdown("### Transaction Analysis")
+            uploaded_files = st.file_uploader("Upload .csv files", type={"csv"}, accept_multiple_files=True)
+
+            if uploaded_files:
+                for file in uploaded_files:
+                    file.seek(0)
+                uploaded_data_read = [pd.read_csv(file) for file in uploaded_files]
+                upd_file_df = pd.concat(uploaded_data_read)
+                agg_data = upd_file_df.groupby(['Flag']).count().reset_index()
+                fig_simple = chrt.simple_chart(upd_file_df)
+                st.altair_chart(fig_simple, use_container_width=True)
+                fig_perc = chrt.perc_chart(agg_data)
+                st.altair_chart(fig_perc, use_container_width=True)
+                filtered_df = dataframe_explorer(upd_file_df, case=False)
+                st.dataframe(filtered_df, use_container_width=True, hide_index=True)
 
 
 run()
