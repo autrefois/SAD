@@ -15,7 +15,7 @@ st.set_page_config(
 
 
 def run() -> None:
-    df = data_loader.get_latest_data(max_rows=200)
+    df = data_loader.get_latest_data(max_rows=300)
 
     # dashboard title
     st.title("Real-Time Anomaly Detection Dashboard")
@@ -28,7 +28,7 @@ def run() -> None:
     placeholder = st.empty()
 
     while True:
-        df = data_loader.get_latest_data(max_rows=200)
+        df = data_loader.get_latest_data(max_rows=300)
         agg_data = df.groupby(['Flag']).count().reset_index()
         with placeholder.container():
             buffer, fig_transactions = st.columns([0.25, 20])
@@ -54,7 +54,7 @@ def run() -> None:
             with fig_detailed:
                 st.markdown("### Detailed Data View")
                 st.dataframe(df, use_container_width=True, hide_index=True)
-        time.sleep(1)
+        time.sleep(0.25)
 
 
 run()
