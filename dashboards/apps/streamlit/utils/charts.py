@@ -5,15 +5,15 @@ def simple_chart(df) -> alt.Chart:
     fig = (
             alt.Chart(df)
             .mark_point()
-            .encode(x="Transaction Time",
-                    y="Amount",
-                    color=alt.Color(shorthand='Flag',
+            .encode(x="Transaction Time:T",
+                    y="Amount:Q",
+                    color=alt.Color(shorthand='Flag:N',
                                     scale=alt.Scale(domain=['Normal', 'Anomaly'], range=['blue', 'red']),
                                     legend=None)
                     )
             ).configure_axis(
             grid=True
-        )
+        ).interactive()
     return fig
 
 
@@ -21,15 +21,15 @@ def line_chart(df) -> alt.Chart:
     fig = (
             alt.Chart(df)
             .mark_line()
-            .encode(x="Transaction Time",
-                    y="Amount",
-                    color=alt.Color(shorthand='Flag',
+            .encode(x="Transaction Time:T",
+                    y="Amount:Q",
+                    color=alt.Color(shorthand='Flag:N',
                                     scale=alt.Scale(domain=['Normal', 'Anomaly'], range=['blue', 'red']),
                                     legend=None)
                     )
             ).configure_axis(
             grid=True
-        )
+        ).interactive()
     return fig
 
 

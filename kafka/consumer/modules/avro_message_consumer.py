@@ -108,4 +108,5 @@ class AvroMessageConsumer:
                 logging.warning(' User requested stop.')
                 break
             finally:
-                sleep(0.5)
+                pass
+                # sleep(0.25)
