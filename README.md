@@ -1,6 +1,6 @@
 # Stream Anomaly Detection
 
-SAD is the project accompanying my [dissertation thesis](https://docs.google.com/document/d/1flRnQu7tjmP0YCgXvZLUBV0qWTP-lzDvo7dnu5t6lhk/edit?usp=sharing).
+SAD is the project accompanying my dissertation thesis.
 
 ## Architecture Overview
 
